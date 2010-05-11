@@ -1,0 +1,4 @@
+recursive-include server_manager/templates *
+recursive-include server_manager/media *
+include README
+include LICENSE

@@ -1,0 +1,64 @@
+{% extends "admin/change_list.html" %}
+{% load i18n %}
+
+{% block extrahead %}
+{{ block.super }}
+<script type="text/javascript">
+var SERVER_MANAGER_I18N = {
+    restart: {
+        success: "{% trans 'successfully restarted server' %}",
+        error: "{% trans 'error restarting server' %}",
+    },
+    uptime: {
+        unknown: "{% trans 'unknown' %}",
+    }
+}
+</script>
+<script type="text/javascript" src="{{ MEDIA_URL }}server_manager/js/server_manager.js"></script>
+{% endblock %}
+
+ {% block breadcrumbs %}
+   <div class="breadcrumbs">
+     <a href="../../">
+       {% trans "Home" %}
+     </a>
+      &rsaquo; 
+      <a href="../">
+        {% trans "Server Manager" %}
+     </a>
+     &rsaquo; 
+     {% trans "Servers" %}
+   </div>
+ {% endblock %}
+
+{% block content %}
+  <div id="content-main">
+    {% block object-tools %}
+    {% endblock %}
+    <div class="module" id="changelist">
+		<table cellspacing="0" id="result_list">
+			<thead>
+				<tr>
+				    <th>{% trans "Site" %}</th>
+				    <th>{% trans "Last Touched" %}</th>
+				    <th style="width:500px;">{% trans "Actions" %}</th>
+				</tr>
+			</thead>
+		    <tbody>
+            {% for site in sites %}
+				<tr class="{% cycle 'row1' 'row2' %}">
+				    <th><a href="{% url admin:sites_site_change site.pk %}">{{ site.name }}</a></th>
+				    <td id="uptime_{{ site.pk }}">{% if site.get_uptime %}{{ site.get_uptime }}{% else %}{% trans "unknown" %}{% endif %}</td>
+				    <td>
+				        {% if site.can_restart %}
+				            <button type="button" id="restart_{{ site.pk }}" class="server-manager restart" name="restart" value="{{ site.pk }}">{% trans "restart" %}</button>
+				        {% endif %}
+				        <span class="response-message" id="{{ site.pk }}_response_message"></span>
+				    </td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+    </div>
+  </div>
+{% endblock %}
