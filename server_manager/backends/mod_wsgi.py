@@ -11,9 +11,7 @@ class ModWSGIBackend(BaseBackend):
                 os.utime(filepath, None)
                 return True
             except IOError:
-                raise
                 return False
-        print 'did not find filepath for site id', site_id
         return False
 
     def get_uptime(self, site_id, request):
